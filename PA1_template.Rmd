@@ -1,25 +1,57 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
+title: "Reproducible Research Peer 1"
+author: "Lawrence Goh"
+date: "Monday, January 19, 2015"
+output: html_document
 ---
 
+My submission for Peer Assessment 1
+===================================
 
-## Loading and preprocessing the data
+```{r}
+library(sqldf)
+# set the working dir
+setwd('W:/2014 Aug - Data Science Specialisation/R files')
 
+# read the input data
+data <- read.csv("activity.csv")
 
-
-## What is mean total number of steps taken per day?
-
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
+# take only complete cases
+data1<-data[complete.cases(data),]
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+x<-sqldf('select date,avg(steps) as mean from data1 group by date')
+
+# show histogram
+hist(x$mean)
+
+# calculate mean, median
+mean(x$mean)
+median(x$mean)
+
+# get for 5 min interval
+y<-sqldf('select date,avg(steps) as mean from data1 where interval=5 group by date')
+plot (y$date, y$mean)
+y[y$mean==max(y$mean),]
+
+# sum of na values in input data
+sum(is.na(data$steps))
+sum(is.na(data$date))
+sum(is.na(data$interval))
+
+# fill in NA with mean value of that date
+#for(i in 1:nrow(data)) {
+#        row <- data[i,]
+        # do stuff with row
+#        dt <- row$date
+#       st <- row$steps
+#        if (is.na(st))
+#        {
+#                data[i,'steps'] <- x[x$date==dt,'mean']
+#        }
+#}
+
+        
+```
+
+
